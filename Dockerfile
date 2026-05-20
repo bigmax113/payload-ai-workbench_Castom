@@ -26,7 +26,8 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 COPY . .
 
-RUN pnpm build
+RUN mkdir -p public \
+  && pnpm build
 
 FROM node:24-bookworm-slim AS runner
 
