@@ -1,7 +1,7 @@
 {
-  "name": "payload-ai-tester-workbench",
+  "name": "payload-custom-admin-workbench",
   "version": "1.0.0",
-  "description": "Tester-friendly Payload CMS AI workbench with document QA and admin validation flows.",
+  "description": "Tester-friendly Payload CMS custom admin workspace for editor and review-flow validation.",
   "license": "MIT",
   "type": "module",
   "scripts": {

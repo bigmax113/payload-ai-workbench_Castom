@@ -5,7 +5,7 @@ import { seedTestUser, cleanupTestUser, testUser } from '../helpers/seedUser'
 test.describe('Admin Panel', () => {
   let page: Page
 
-  test.beforeAll(async ({ browser }, testInfo) => {
+  test.beforeAll(async ({ browser }) => {
     await seedTestUser()
 
     const context = await browser.newContext()
@@ -21,6 +21,8 @@ test.describe('Admin Panel', () => {
   test('can navigate to dashboard', async () => {
     await page.goto('http://localhost:3000/admin')
     await expect(page).toHaveURL('http://localhost:3000/admin')
+    const customDashboard = page.locator('.custom-admin-dashboard').first()
+    await expect(customDashboard).toBeVisible()
     const dashboardArtifact = page.locator('span[title="Dashboard"]').first()
     await expect(dashboardArtifact).toBeVisible()
   })

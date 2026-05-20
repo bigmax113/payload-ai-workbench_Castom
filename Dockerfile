@@ -17,7 +17,7 @@ RUN corepack enable \
   && corepack prepare pnpm@10.27.0 --activate \
   && pnpm config set store-dir /pnpm/store
 
-RUN --mount=type=cache,id=payload-ai-tester-pnpm-store,target=/pnpm/store \
+RUN --mount=type=cache,id=payload-custom-admin-pnpm-store,target=/pnpm/store \
   pnpm install --frozen-lockfile
 
 FROM deps AS builder
@@ -39,13 +39,12 @@ ENV HOSTNAME=0.0.0.0
 WORKDIR /app
 
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends ca-certificates poppler-utils \
+  && apt-get install -y --no-install-recommends ca-certificates \
   && rm -rf /var/lib/apt/lists/* \
   && groupadd --system --gid 1001 nodejs \
   && useradd --system --uid 1001 --gid nodejs nextjs
 
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/docs ./docs
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 

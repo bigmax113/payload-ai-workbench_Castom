@@ -7,27 +7,14 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      AI_DOCS_DIR: /docs
       DATABASE_URL: postgres://payload:payload@postgres:5432/payload
-      LM_STUDIO_BASE_URL: ${LM_STUDIO_BASE_URL:-http://host.docker.internal:1234/v1}
-      LM_STUDIO_EMBEDDING_MODEL: ${LM_STUDIO_EMBEDDING_MODEL:-text-embedding-bge-m3}
-      LM_STUDIO_MODEL: ${LM_STUDIO_MODEL:-qwen/qwen3.6-35b-a3b}
-      LM_STUDIO_NATIVE_BASE_URL: ${LM_STUDIO_NATIVE_BASE_URL:-http://host.docker.internal:1234/api/v1}
-      LM_STUDIO_UNLOAD_EMBEDDING_AFTER: ${LM_STUDIO_UNLOAD_EMBEDDING_AFTER:-true}
       PAYLOAD_ADMIN_EMAIL: ${PAYLOAD_ADMIN_EMAIL:-dev@payloadcms.com}
       PAYLOAD_ADMIN_PASSWORD: ${PAYLOAD_ADMIN_PASSWORD:-test}
       PAYLOAD_DB_PUSH: ${PAYLOAD_DB_PUSH:-true}
       PAYLOAD_SECRET: ${PAYLOAD_SECRET:-local-dev-secret-change-me}
       PORT: 3000
-    extra_hosts:
-      - host.docker.internal:host-gateway
     ports:
       - ${APP_PORT:-3000}:3000
-    volumes:
-      - type: bind
-        source: ${AI_DOCS_DIR:-./docs}
-        target: /docs
-        read_only: true
 
   postgres:
     image: postgres:16

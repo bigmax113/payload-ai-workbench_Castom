@@ -5,16 +5,43 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
-import { aiDocsEndpoint, aiFoldersEndpoint, askEndpoint } from './ai/endpoints'
-import { AIProjectsCollection, aiProjectsSlug } from './collections/AIProjects'
 import { ArticlesCollection, articlesSlug } from './collections/Articles'
+import {
+  EditorialWorkflowsCollection,
+  editorialWorkflowsSlug,
+} from './collections/EditorialWorkflows'
 import { Media } from './collections/Media'
-import { PromptTemplatesCollection, promptTemplatesSlug } from './collections/PromptTemplates'
-import { TestRunsCollection, testRunsSlug } from './collections/TestRuns'
+import { PagesCollection, pagesSlug } from './collections/Pages'
+import { ReviewTasksCollection, reviewTasksSlug } from './collections/ReviewTasks'
 import { Users, usersSlug } from './collections/Users'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+const richTextParagraph = (text: string) => ({
+  root: {
+    children: [
+      {
+        children: [
+          {
+            text,
+            type: 'text',
+          },
+        ],
+        direction: null,
+        format: '' as const,
+        indent: 0,
+        type: 'paragraph',
+        version: 1,
+      },
+    ],
+    direction: null,
+    format: '' as const,
+    indent: 0,
+    type: 'root',
+    version: 1,
+  },
+})
 
 export default buildConfig({
   admin: {
@@ -22,17 +49,22 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      titleSuffix: ' - Custom Admin',
+    },
+    components: {
+      beforeDashboard: ['/admin/components/AdminDashboard#AdminDashboard'],
+    },
   },
   collections: [
-    AIProjectsCollection,
-    PromptTemplatesCollection,
-    TestRunsCollection,
+    PagesCollection,
     ArticlesCollection,
+    EditorialWorkflowsCollection,
+    ReviewTasksCollection,
     Media,
     Users,
   ],
   editor: lexicalEditor(),
-  endpoints: [aiDocsEndpoint, aiFoldersEndpoint, askEndpoint],
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
@@ -61,147 +93,170 @@ export default buildConfig({
         collection: usersSlug,
         data: {
           email: adminEmail,
+          name: 'Demo Admin',
           password: adminPassword,
+          role: 'admin',
         },
       })
     }
 
-    const demoProjects = await payload.find({
-      collection: aiProjectsSlug,
+    const pages = await payload.find({
+      collection: pagesSlug,
       limit: 1,
       where: {
-        name: {
-          equals: 'AI Docs Workbench Demo',
+        slug: {
+          equals: 'custom-admin-overview',
         },
       },
     })
 
-    let demoProjectID = demoProjects.docs[0]?.id
+    let demoPageID = pages.docs[0]?.id
 
-    if (!demoProjectID) {
-      const project = await payload.create({
-        collection: aiProjectsSlug,
+    if (!demoPageID) {
+      const page = await payload.create({
+        collection: pagesSlug,
         data: {
-          defaultModel: 'qwen/qwen3.6-35b-a3b',
-          docsFolder: 'all',
-          goal: 'Let a non-technical tester ask questions over local product documents, inspect sources, and save validation notes in the admin panel.',
-          name: 'AI Docs Workbench Demo',
-          owner: 'Content QA',
-          status: 'testing',
-          successCriteria: [
-            {
-              criterion: 'Open /ai and preview retrieved sources before calling the model.',
-            },
-            {
-              criterion: 'Open /admin and manage articles, prompts, media, and test runs.',
-            },
-          ],
+          body: richTextParagraph(
+            'Use this page to validate tabs, rich text editing, review notes, autosave, and publishing states inside the custom admin.',
+          ),
+          hero: {
+            eyebrow: 'Admin test page',
+            headline: 'Custom admin overview',
+            summary:
+              'A realistic page record for checking editor ergonomics without the stock starter screen.',
+          },
+          owner: 'Content Operations',
+          reviewNotes: 'Check field grouping, sidebar controls, autosave behavior, and draft previews.',
+          slug: 'custom-admin-overview',
+          status: 'review',
+          template: 'internal',
+          title: 'Custom admin overview',
         },
       })
 
-      demoProjectID = project.id
+      demoPageID = page.id
     }
 
-    const demoPrompts = await payload.find({
-      collection: promptTemplatesSlug,
-      limit: 1,
-      where: {
-        title: {
-          equals: 'Document QA starter',
-        },
-      },
-    })
-
-    let demoPromptID = demoPrompts.docs[0]?.id
-
-    if (!demoPromptID) {
-      const prompt = await payload.create({
-        collection: promptTemplatesSlug,
-        data: {
-          isEnabled: true,
-          maxChunks: 8,
-          mode: 'qa',
-          systemPrompt:
-            'Answer in the same language as the question. Use only the retrieved context. If the answer is not present, say what is missing and list the closest sources.',
-          temperature: 0.2,
-          title: 'Document QA starter',
-          userPrompt:
-            'Summarize the answer for a business tester and cite the most relevant files.',
-        },
-      })
-
-      demoPromptID = prompt.id
-    }
-
-    const demoArticles = await payload.find({
+    const articles = await payload.find({
       collection: articlesSlug,
       limit: 1,
       where: {
         slug: {
-          equals: 'payload-ai-workbench-demo',
+          equals: 'editor-testing-guide',
         },
       },
     })
 
-    if (!demoArticles.totalDocs) {
-      await payload.create({
+    let demoArticleID = articles.docs[0]?.id
+
+    if (!demoArticleID) {
+      const article = await payload.create({
         collection: articlesSlug,
         data: {
-          category: 'knowledge-base',
-          content: {
-            root: {
-              children: [
-                {
-                  children: [
-                    {
-                      text: 'This starter article demonstrates the Payload editor, drafts, media fields, and SEO fields for a tester-friendly AI CMS workflow.',
-                      type: 'text',
-                    },
-                  ],
-                  direction: null,
-                  format: '',
-                  indent: 0,
-                  type: 'paragraph',
-                  version: 1,
-                },
-              ],
-              direction: null,
-              format: '',
-              indent: 0,
-              type: 'root',
-              version: 1,
-            },
-          },
-          owner: 'Content QA',
-          slug: 'payload-ai-workbench-demo',
+          category: 'internal-guide',
+          content: richTextParagraph(
+            'This starter article demonstrates the Payload editor, drafts, media fields, SEO fields, blocks, and review handoff for a tester-friendly CMS.',
+          ),
+          owner: 'Content Operations',
+          slug: 'editor-testing-guide',
           status: 'draft',
-          summary: 'A ready-made article for testing the Payload admin editor.',
-          title: 'Payload AI Workbench demo article',
+          summary: 'A ready-made article for testing the custom Payload admin editor.',
+          title: 'Editor testing guide',
+        },
+      })
+
+      demoArticleID = article.id
+    }
+
+    const workflows = await payload.find({
+      collection: editorialWorkflowsSlug,
+      limit: 1,
+      where: {
+        name: {
+          equals: 'Editorial review pipeline',
+        },
+      },
+    })
+
+    let demoWorkflowID = workflows.docs[0]?.id
+
+    if (!demoWorkflowID) {
+      const workflow = await payload.create({
+        collection: editorialWorkflowsSlug,
+        data: {
+          name: 'Editorial review pipeline',
+          owner: 'Content Operations',
+          stages: [
+            {
+              label: 'Create draft',
+              notes: 'Author fills required content fields and uploads supporting media.',
+              state: 'done',
+            },
+            {
+              label: 'Review structure',
+              notes: 'Tester checks tabs, sidebar fields, validation, relationships, and autosave.',
+              state: 'in-progress',
+            },
+            {
+              label: 'Approve for publishing',
+              notes: 'Final reviewer confirms SEO fields, status changes, and handoff notes.',
+              state: 'todo',
+            },
+          ],
+          status: 'active',
+          summary:
+            'A compact workflow for validating whether the admin panel feels clear to a non-technical editor.',
+        },
+      })
+
+      demoWorkflowID = workflow.id
+    }
+
+    const reviewTasks = await payload.find({
+      collection: reviewTasksSlug,
+      limit: 1,
+      where: {
+        title: {
+          equals: 'Validate custom admin flow',
+        },
+      },
+    })
+
+    if (!reviewTasks.totalDocs) {
+      await payload.create({
+        collection: reviewTasksSlug,
+        data: {
+          assignee: 'Tester',
+          checklist: [
+            {
+              isDone: false,
+              label: 'Open the dashboard and confirm the custom overview is visible.',
+            },
+            {
+              isDone: false,
+              label: 'Create or edit a page using the Content and Review tabs.',
+            },
+            {
+              isDone: false,
+              label: 'Update workflow stages and confirm list columns are useful.',
+            },
+          ],
+          notes:
+            'This task is intentionally admin-only. It exists to validate editing comfort and review handoff.',
+          priority: 'high',
+          status: 'new',
+          target: {
+            relationTo: pagesSlug,
+            value: demoPageID,
+          },
+          title: 'Validate custom admin flow',
+          workflow: demoWorkflowID,
         },
       })
     }
 
-    const demoRuns = await payload.find({
-      collection: testRunsSlug,
-      limit: 1,
-      where: {
-        title: {
-          equals: 'First tester run',
-        },
-      },
-    })
-
-    if (!demoRuns.totalDocs) {
-      await payload.create({
-        collection: testRunsSlug,
-        data: {
-          project: demoProjectID,
-          promptTemplate: demoPromptID,
-          question: 'What should a tester check first in this workspace?',
-          status: 'new',
-          title: 'First tester run',
-        },
-      })
+    if (demoArticleID) {
+      payload.logger.info(`Seed article ready: ${demoArticleID}`)
     }
   },
   sharp,

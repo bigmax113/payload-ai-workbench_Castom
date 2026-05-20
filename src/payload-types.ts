@@ -59,580 +59,572 @@ export type SupportedTimezones =
   | 'Pacific/Guam'
   | 'Pacific/Noumea'
   | 'Pacific/Auckland'
-  | 'Pacific/Fiji'
+  | 'Pacific/Fiji';
 
 export interface Config {
   auth: {
-    users: UserAuthOperations
-  }
-  blocks: {}
+    users: UserAuthOperations;
+  };
+  blocks: {};
   collections: {
-    'ai-projects': AiProject
-    'prompt-templates': PromptTemplate
-    'test-runs': TestRun
-    articles: Article
-    media: Media
-    users: User
-    'payload-kv': PayloadKv
-    'payload-locked-documents': PayloadLockedDocument
-    'payload-preferences': PayloadPreference
-    'payload-migrations': PayloadMigration
-  }
-  collectionsJoins: {}
+    pages: Page;
+    articles: Article;
+    'editorial-workflows': EditorialWorkflow;
+    'review-tasks': ReviewTask;
+    media: Media;
+    users: User;
+    'payload-kv': PayloadKv;
+    'payload-locked-documents': PayloadLockedDocument;
+    'payload-preferences': PayloadPreference;
+    'payload-migrations': PayloadMigration;
+  };
+  collectionsJoins: {};
   collectionsSelect: {
-    'ai-projects': AiProjectsSelect<false> | AiProjectsSelect<true>
-    'prompt-templates': PromptTemplatesSelect<false> | PromptTemplatesSelect<true>
-    'test-runs': TestRunsSelect<false> | TestRunsSelect<true>
-    articles: ArticlesSelect<false> | ArticlesSelect<true>
-    media: MediaSelect<false> | MediaSelect<true>
-    users: UsersSelect<false> | UsersSelect<true>
-    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>
-    'payload-locked-documents':
-      | PayloadLockedDocumentsSelect<false>
-      | PayloadLockedDocumentsSelect<true>
-    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>
-    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>
-  }
+    pages: PagesSelect<false> | PagesSelect<true>;
+    articles: ArticlesSelect<false> | ArticlesSelect<true>;
+    'editorial-workflows': EditorialWorkflowsSelect<false> | EditorialWorkflowsSelect<true>;
+    'review-tasks': ReviewTasksSelect<false> | ReviewTasksSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
+    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
+    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
+    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
+  };
   db: {
-    defaultIDType: number
-  }
-  fallbackLocale: null
-  globals: {}
-  globalsSelect: {}
-  locale: null
+    defaultIDType: number;
+  };
+  fallbackLocale: null;
+  globals: {};
+  globalsSelect: {};
+  locale: null;
   widgets: {
-    collections: CollectionsWidget
-  }
-  user: User
+    collections: CollectionsWidget;
+  };
+  user: User;
   jobs: {
-    tasks: unknown
-    workflows: unknown
-  }
+    tasks: unknown;
+    workflows: unknown;
+  };
 }
 export interface UserAuthOperations {
   forgotPassword: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
   login: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
   registerFirstUser: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
   unlock: {
-    email: string
-    password: string
-  }
+    email: string;
+    password: string;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ai-projects".
+ * via the `definition` "pages".
  */
-export interface AiProject {
-  id: number
-  name: string
-  status: 'planning' | 'testing' | 'ready' | 'paused'
+export interface Page {
+  id: number;
+  title: string;
   /**
-   * Person or team responsible for validating this workspace.
+   * Stable URL segment or internal page key.
    */
-  owner?: string | null
-  /**
-   * What the tester should be able to prove with this AI workspace.
-   */
-  goal: string
-  /**
-   * Suggested folder under AI_DOCS_DIR, for example Manuals/B2B.
-   */
-  docsFolder?: string | null
-  defaultModel?: ('qwen/qwen3.6-35b-a3b' | 'qwen/qwen2.5-vl-7b' | 'google/gemma-3-12b') | null
-  successCriteria?:
-    | {
-        criterion: string
-        id?: string | null
-      }[]
-    | null
-  /**
-   * Internal notes for the tester or editor.
-   */
-  notes?: {
+  slug: string;
+  status: 'draft' | 'review' | 'approved' | 'published';
+  template?: ('standard' | 'product' | 'docs' | 'internal') | null;
+  hero: {
+    eyebrow?: string | null;
+    headline: string;
+    summary?: string | null;
+    image?: (number | null) | Media;
+  };
+  body: {
     root: {
-      type: string
+      type: string;
       children: {
-        type: any
-        version: number
-        [k: string]: unknown
-      }[]
-      direction: ('ltr' | 'rtl') | null
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
-      indent: number
-      version: number
-    }
-    [k: string]: unknown
-  } | null
-  updatedAt: string
-  createdAt: string
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "prompt-templates".
- */
-export interface PromptTemplate {
-  id: number
-  title: string
-  isEnabled?: boolean | null
-  mode: 'qa' | 'summary' | 'audit' | 'draft'
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  owner?: string | null;
   /**
-   * Stable model behavior: role, language policy, source policy, and safety rules.
+   * Short handoff notes for the person validating this page.
    */
-  systemPrompt: string
-  /**
-   * Reusable prompt text. Testers can copy it into the Workbench question editor.
-   */
-  userPrompt: string
-  maxChunks?: number | null
-  temperature?: number | null
-  tags?:
-    | {
-        tag?: string | null
-        id?: string | null
-      }[]
-    | null
-  updatedAt: string
-  createdAt: string
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "test-runs".
- */
-export interface TestRun {
-  id: number
-  title: string
-  project?: (number | null) | AiProject
-  promptTemplate?: (number | null) | PromptTemplate
-  status: 'new' | 'passed' | 'needs-review' | 'failed'
-  rating?: ('good' | 'okay' | 'bad') | null
-  ranAt?: string | null
-  question: string
-  /**
-   * Paste the model answer here when saving a manual validation run.
-   */
-  answer?: string | null
-  sources?:
-    | {
-        fileName: string
-        path?: string | null
-        score?: number | null
-        id?: string | null
-      }[]
-    | null
-  reviewNotes?: {
-    root: {
-      type: string
-      children: {
-        type: any
-        version: number
-        [k: string]: unknown
-      }[]
-      direction: ('ltr' | 'rtl') | null
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
-      indent: number
-      version: number
-    }
-    [k: string]: unknown
-  } | null
-  updatedAt: string
-  createdAt: string
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "articles".
- */
-export interface Article {
-  id: number
-  title: string
-  /**
-   * Human-readable URL segment, for example: product-visibility-guide.
-   */
-  slug: string
-  status: 'draft' | 'review' | 'published'
-  publishedAt?: string | null
-  /**
-   * Short intro shown in cards, search results, and previews.
-   */
-  summary?: string | null
-  coverImage?: (number | null) | Media
-  /**
-   * Lexical editor: headings, lists, links, uploads, tables, inline toolbar, and structured blocks.
-   */
-  content: {
-    root: {
-      type: string
-      children: {
-        type: any
-        version: number
-        [k: string]: unknown
-      }[]
-      direction: ('ltr' | 'rtl') | null
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
-      indent: number
-      version: number
-    }
-    [k: string]: unknown
-  }
-  category?: ('product-content' | 'internal-guide' | 'release-note' | 'knowledge-base') | null
-  tags?:
-    | {
-        tag?: string | null
-        id?: string | null
-      }[]
-    | null
-  /**
-   * Business owner or department responsible for this article.
-   */
-  owner?: string | null
-  seo?: {
-    title?: string | null
-    description?: string | null
-    image?: (number | null) | Media
-  }
-  updatedAt: string
-  createdAt: string
-  _status?: ('draft' | 'published') | null
+  reviewNotes?: string | null;
+  publishedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
-  id: number
+  id: number;
   /**
    * Short accessible description for images and uploaded documents.
    */
-  alt?: string | null
+  alt?: string | null;
   /**
    * Optional note shown to content editors.
    */
-  caption?: string | null
+  caption?: string | null;
   tags?:
     | {
-        tag?: string | null
-        id?: string | null
+        tag?: string | null;
+        id?: string | null;
       }[]
-    | null
-  updatedAt: string
-  createdAt: string
-  url?: string | null
-  thumbnailURL?: string | null
-  filename?: string | null
-  mimeType?: string | null
-  filesize?: number | null
-  width?: number | null
-  height?: number | null
-  focalX?: number | null
-  focalY?: number | null
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles".
+ */
+export interface Article {
+  id: number;
+  title: string;
+  /**
+   * Human-readable URL segment, for example: product-visibility-guide.
+   */
+  slug: string;
+  status: 'draft' | 'review' | 'published';
+  publishedAt?: string | null;
+  /**
+   * Short intro shown in cards, search results, and previews.
+   */
+  summary?: string | null;
+  coverImage?: (number | null) | Media;
+  /**
+   * Lexical editor: headings, lists, links, uploads, tables, inline toolbar, and structured blocks.
+   */
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  category?: ('product-content' | 'internal-guide' | 'release-note' | 'knowledge-base') | null;
+  tags?:
+    | {
+        tag?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Business owner or department responsible for this article.
+   */
+  owner?: string | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "editorial-workflows".
+ */
+export interface EditorialWorkflow {
+  id: number;
+  name: string;
+  status: 'planned' | 'active' | 'paused' | 'archived';
+  owner?: string | null;
+  /**
+   * What this workflow is used to validate or publish.
+   */
+  summary?: string | null;
+  stages?:
+    | {
+        label: string;
+        state: 'todo' | 'in-progress' | 'done';
+        notes?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "review-tasks".
+ */
+export interface ReviewTask {
+  id: number;
+  title: string;
+  status: 'new' | 'in-progress' | 'blocked' | 'ready' | 'done';
+  priority: 'low' | 'normal' | 'high';
+  assignee?: string | null;
+  dueAt?: string | null;
+  workflow?: (number | null) | EditorialWorkflow;
+  /**
+   * The page or article this review task belongs to.
+   */
+  target?:
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'articles';
+        value: number | Article;
+      } | null);
+  checklist?:
+    | {
+        label: string;
+        isDone?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Tester observations, blockers, or handoff notes.
+   */
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
-  id: number
-  updatedAt: string
-  createdAt: string
-  email: string
-  resetPasswordToken?: string | null
-  resetPasswordExpiration?: string | null
-  salt?: string | null
-  hash?: string | null
-  loginAttempts?: number | null
-  lockUntil?: string | null
+  id: number;
+  name?: string | null;
+  role: 'admin' | 'editor' | 'reviewer';
+  department?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
   sessions?:
     | {
-        id: string
-        createdAt?: string | null
-        expiresAt: string
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
       }[]
-    | null
-  password?: string | null
-  collection: 'users'
+    | null;
+  password?: string | null;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: number
-  key: string
+  id: number;
+  key: string;
   data:
     | {
-        [k: string]: unknown
+        [k: string]: unknown;
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null
+    | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number
+  id: number;
   document?:
     | ({
-        relationTo: 'ai-projects'
-        value: number | AiProject
+        relationTo: 'pages';
+        value: number | Page;
       } | null)
     | ({
-        relationTo: 'prompt-templates'
-        value: number | PromptTemplate
+        relationTo: 'articles';
+        value: number | Article;
       } | null)
     | ({
-        relationTo: 'test-runs'
-        value: number | TestRun
+        relationTo: 'editorial-workflows';
+        value: number | EditorialWorkflow;
       } | null)
     | ({
-        relationTo: 'articles'
-        value: number | Article
+        relationTo: 'review-tasks';
+        value: number | ReviewTask;
       } | null)
     | ({
-        relationTo: 'media'
-        value: number | Media
+        relationTo: 'media';
+        value: number | Media;
       } | null)
     | ({
-        relationTo: 'users'
-        value: number | User
-      } | null)
-  globalSlug?: string | null
+        relationTo: 'users';
+        value: number | User;
+      } | null);
+  globalSlug?: string | null;
   user: {
-    relationTo: 'users'
-    value: number | User
-  }
-  updatedAt: string
-  createdAt: string
+    relationTo: 'users';
+    value: number | User;
+  };
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number
+  id: number;
   user: {
-    relationTo: 'users'
-    value: number | User
-  }
-  key?: string | null
+    relationTo: 'users';
+    value: number | User;
+  };
+  key?: string | null;
   value?:
     | {
-        [k: string]: unknown
+        [k: string]: unknown;
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null
-  updatedAt: string
-  createdAt: string
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number
-  name?: string | null
-  batch?: number | null
-  updatedAt: string
-  createdAt: string
+  id: number;
+  name?: string | null;
+  batch?: number | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ai-projects_select".
+ * via the `definition` "pages_select".
  */
-export interface AiProjectsSelect<T extends boolean = true> {
-  name?: T
-  status?: T
-  owner?: T
-  goal?: T
-  docsFolder?: T
-  defaultModel?: T
-  successCriteria?:
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  status?: T;
+  template?: T;
+  hero?:
     | T
     | {
-        criterion?: T
-        id?: T
-      }
-  notes?: T
-  updatedAt?: T
-  createdAt?: T
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "prompt-templates_select".
- */
-export interface PromptTemplatesSelect<T extends boolean = true> {
-  title?: T
-  isEnabled?: T
-  mode?: T
-  systemPrompt?: T
-  userPrompt?: T
-  maxChunks?: T
-  temperature?: T
-  tags?:
-    | T
-    | {
-        tag?: T
-        id?: T
-      }
-  updatedAt?: T
-  createdAt?: T
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "test-runs_select".
- */
-export interface TestRunsSelect<T extends boolean = true> {
-  title?: T
-  project?: T
-  promptTemplate?: T
-  status?: T
-  rating?: T
-  ranAt?: T
-  question?: T
-  answer?: T
-  sources?:
-    | T
-    | {
-        fileName?: T
-        path?: T
-        score?: T
-        id?: T
-      }
-  reviewNotes?: T
-  updatedAt?: T
-  createdAt?: T
+        eyebrow?: T;
+        headline?: T;
+        summary?: T;
+        image?: T;
+      };
+  body?: T;
+  owner?: T;
+  reviewNotes?: T;
+  publishedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "articles_select".
  */
 export interface ArticlesSelect<T extends boolean = true> {
-  title?: T
-  slug?: T
-  status?: T
-  publishedAt?: T
-  summary?: T
-  coverImage?: T
-  content?: T
-  category?: T
+  title?: T;
+  slug?: T;
+  status?: T;
+  publishedAt?: T;
+  summary?: T;
+  coverImage?: T;
+  content?: T;
+  category?: T;
   tags?:
     | T
     | {
-        tag?: T
-        id?: T
-      }
-  owner?: T
+        tag?: T;
+        id?: T;
+      };
+  owner?: T;
   seo?:
     | T
     | {
-        title?: T
-        description?: T
-        image?: T
-      }
-  updatedAt?: T
-  createdAt?: T
-  _status?: T
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "editorial-workflows_select".
+ */
+export interface EditorialWorkflowsSelect<T extends boolean = true> {
+  name?: T;
+  status?: T;
+  owner?: T;
+  summary?: T;
+  stages?:
+    | T
+    | {
+        label?: T;
+        state?: T;
+        notes?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "review-tasks_select".
+ */
+export interface ReviewTasksSelect<T extends boolean = true> {
+  title?: T;
+  status?: T;
+  priority?: T;
+  assignee?: T;
+  dueAt?: T;
+  workflow?: T;
+  target?: T;
+  checklist?:
+    | T
+    | {
+        label?: T;
+        isDone?: T;
+        id?: T;
+      };
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
-  alt?: T
-  caption?: T
+  alt?: T;
+  caption?: T;
   tags?:
     | T
     | {
-        tag?: T
-        id?: T
-      }
-  updatedAt?: T
-  createdAt?: T
-  url?: T
-  thumbnailURL?: T
-  filename?: T
-  mimeType?: T
-  filesize?: T
-  width?: T
-  height?: T
-  focalX?: T
-  focalY?: T
+        tag?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  updatedAt?: T
-  createdAt?: T
-  email?: T
-  resetPasswordToken?: T
-  resetPasswordExpiration?: T
-  salt?: T
-  hash?: T
-  loginAttempts?: T
-  lockUntil?: T
+  name?: T;
+  role?: T;
+  department?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
   sessions?:
     | T
     | {
-        id?: T
-        createdAt?: T
-        expiresAt?: T
-      }
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
-  key?: T
-  data?: T
+  key?: T;
+  data?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
-  document?: T
-  globalSlug?: T
-  user?: T
-  updatedAt?: T
-  createdAt?: T
+  document?: T;
+  globalSlug?: T;
+  user?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences_select".
  */
 export interface PayloadPreferencesSelect<T extends boolean = true> {
-  user?: T
-  key?: T
-  value?: T
-  updatedAt?: T
-  createdAt?: T
+  user?: T;
+  key?: T;
+  value?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations_select".
  */
 export interface PayloadMigrationsSelect<T extends boolean = true> {
-  name?: T
-  batch?: T
-  updatedAt?: T
-  createdAt?: T
+  name?: T;
+  batch?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -640,17 +632,18 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface CollectionsWidget {
   data?: {
-    [k: string]: unknown
-  }
-  width: 'full'
+    [k: string]: unknown;
+  };
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "auth".
  */
 export interface Auth {
-  [k: string]: unknown
+  [k: string]: unknown;
 }
+
 
 declare module 'payload' {
   export interface GeneratedTypes extends Config {}
