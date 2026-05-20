@@ -326,7 +326,7 @@ export interface ReviewTask {
 export interface User {
   id: number;
   name?: string | null;
-  role: 'admin' | 'editor' | 'reviewer';
+  role?: ('admin' | 'editor' | 'reviewer') | null;
   department?: string | null;
   updatedAt: string;
   createdAt: string;

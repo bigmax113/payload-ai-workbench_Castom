@@ -33,7 +33,6 @@ export const Users: CollectionConfig = {
           value: 'reviewer',
         },
       ],
-      required: true,
     },
     {
       name: 'department',
