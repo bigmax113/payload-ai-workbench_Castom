@@ -53,7 +53,7 @@ const calloutBlock = {
 export const ArticlesCollection: CollectionConfig = {
   slug: articlesSlug,
   admin: {
-    defaultColumns: ['title', 'status', 'category', 'updatedAt'],
+    defaultColumns: ['title', 'reviewStatus', 'category', 'updatedAt'],
     group: 'CMS',
     useAsTitle: 'title',
   },
@@ -75,7 +75,7 @@ export const ArticlesCollection: CollectionConfig = {
       unique: true,
     },
     {
-      name: 'status',
+      name: 'reviewStatus',
       type: 'select',
       admin: {
         position: 'sidebar',

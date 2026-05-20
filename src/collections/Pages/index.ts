@@ -13,7 +13,7 @@ export const pagesSlug = 'pages'
 export const PagesCollection: CollectionConfig = {
   slug: pagesSlug,
   admin: {
-    defaultColumns: ['title', 'status', 'template', 'updatedAt'],
+    defaultColumns: ['title', 'reviewStatus', 'template', 'updatedAt'],
     group: 'Content',
     useAsTitle: 'title',
   },
@@ -35,7 +35,7 @@ export const PagesCollection: CollectionConfig = {
       unique: true,
     },
     {
-      name: 'status',
+      name: 'reviewStatus',
       type: 'select',
       admin: {
         position: 'sidebar',

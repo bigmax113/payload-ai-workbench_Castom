@@ -136,7 +136,7 @@ export interface Page {
    * Stable URL segment or internal page key.
    */
   slug: string;
-  status: 'draft' | 'review' | 'approved' | 'published';
+  reviewStatus: 'draft' | 'review' | 'approved' | 'published';
   template?: ('standard' | 'product' | 'docs' | 'internal') | null;
   hero: {
     eyebrow?: string | null;
@@ -212,7 +212,7 @@ export interface Article {
    * Human-readable URL segment, for example: product-visibility-guide.
    */
   slug: string;
-  status: 'draft' | 'review' | 'published';
+  reviewStatus: 'draft' | 'review' | 'published';
   publishedAt?: string | null;
   /**
    * Short intro shown in cards, search results, and previews.
@@ -444,7 +444,7 @@ export interface PayloadMigration {
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
-  status?: T;
+  reviewStatus?: T;
   template?: T;
   hero?:
     | T
@@ -469,7 +469,7 @@ export interface PagesSelect<T extends boolean = true> {
 export interface ArticlesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
-  status?: T;
+  reviewStatus?: T;
   publishedAt?: T;
   summary?: T;
   coverImage?: T;

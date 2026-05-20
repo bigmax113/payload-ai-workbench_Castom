@@ -51,4 +51,6 @@ This project includes `render.yaml`.
 4. Set `PAYLOAD_ADMIN_PASSWORD`.
 5. Recommended: set `PAYLOAD_SECRET` to a long random string for persistent sessions.
 
+If you are using an existing Render Web Service instead of creating from Blueprint, create a Render PostgreSQL database and add its Internal Database URL to the web service as both `DATABASE_URL` and `POSTGRES_URL`.
+
 For this tester build, `PAYLOAD_DB_PUSH=true` lets Payload create and update Postgres tables on boot. Set it to `false` only when you decide to manage migrations manually.

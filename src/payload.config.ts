@@ -14,6 +14,7 @@ import { Media } from './collections/Media'
 import { PagesCollection, pagesSlug } from './collections/Pages'
 import { ReviewTasksCollection, reviewTasksSlug } from './collections/ReviewTasks'
 import { Users, usersSlug } from './collections/Users'
+import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -77,6 +78,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || process.env.POSTGRES_URL || '',
     },
+    prodMigrations: migrations,
     push: process.env.PAYLOAD_DB_PUSH !== 'false',
   }),
   onInit: async (payload) => {
@@ -131,8 +133,8 @@ export default buildConfig({
           },
           owner: 'Content Operations',
           reviewNotes: 'Check field grouping, sidebar controls, autosave behavior, and draft previews.',
+          reviewStatus: 'review',
           slug: 'custom-admin-overview',
-          status: 'review',
           template: 'internal',
           title: 'Custom admin overview',
         },
@@ -162,8 +164,8 @@ export default buildConfig({
             'This starter article demonstrates the Payload editor, drafts, media fields, SEO fields, blocks, and review handoff for a tester-friendly CMS.',
           ),
           owner: 'Content Operations',
+          reviewStatus: 'draft',
           slug: 'editor-testing-guide',
-          status: 'draft',
           summary: 'A ready-made article for testing the custom Payload admin editor.',
           title: 'Editor testing guide',
         },
