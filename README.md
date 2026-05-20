@@ -49,5 +49,6 @@ This project includes `render.yaml`.
 2. In Render, choose `New -> Blueprint`.
 3. Connect the repository.
 4. Set `PAYLOAD_ADMIN_PASSWORD`.
+5. Recommended: set `PAYLOAD_SECRET` to a long random string for persistent sessions.
 
 For this tester build, `PAYLOAD_DB_PUSH=true` lets Payload create and update Postgres tables on boot. Set it to `false` only when you decide to manage migrations manually.

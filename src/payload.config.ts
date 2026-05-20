@@ -17,6 +17,10 @@ import { Users, usersSlug } from './collections/Users'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+const payloadSecret =
+  process.env.PAYLOAD_SECRET ||
+  process.env.PAYLOAD_ADMIN_PASSWORD ||
+  'payload-custom-admin-demo-secret-change-me'
 
 const richTextParagraph = (text: string) => ({
   root: {
@@ -65,7 +69,7 @@ export default buildConfig({
     Users,
   ],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: payloadSecret,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
